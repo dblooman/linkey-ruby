@@ -1,0 +1,4 @@
+.bundle/*
+pages/
+.DS_Store
+Gemfile.lock
