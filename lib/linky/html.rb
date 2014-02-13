@@ -29,8 +29,12 @@ class Linky::SaveLinks
       
       linky.widths.each do |width|
         file_name = file_names(width, label, linky.domain_label)    
-        linky.check_page_links engine, url, width, file_name
+        check_page_links engine, url, width, file_name
       end
     end
+  end
+
+  def check_page_links(browser, url, width, file_name)
+    puts `"#{browser}" "#{@linky.snap_file}" "#{url}" "#{width}" > "#{file_name}"`
   end
 end

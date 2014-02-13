@@ -38,8 +38,4 @@ class Linky::Config
   def engine
     @config['browser']
   end
-
-  def check_page_links(browser, url, width, file_name)
-    puts `"#{browser}" #{@config['phantomjs_options']} "#{snap_file}" "#{url}" "#{width}" > "#{file_name}"`
-  end
 end

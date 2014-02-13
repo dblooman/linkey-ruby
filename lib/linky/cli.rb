@@ -2,6 +2,7 @@ require 'thor'
 require 'linky'
 require 'linky/html'
 require 'linky/folder'
+require 'linky/ping'
 
 class Linky::CLI < Thor
   include Thor::Actions
@@ -34,6 +35,12 @@ class Linky::CLI < Thor
   def html(config_name)
     html = Linky::SaveLinks.new(config_name)
     html.check_links
+  end
+
+  desc "parse links", "checks links"
+  def status(config_name)
+    status = Linky::CheckResponse.new(config_name)
+    status.test
   end
 
   desc "check config_name", "A full linky job"
