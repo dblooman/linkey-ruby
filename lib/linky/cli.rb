@@ -40,7 +40,7 @@ class Linky::CLI < Thor
   desc "parse links", "checks links"
   def status(config_name)
     status = Linky::CheckResponse.new(config_name)
-    status.test
+    status.check_status
   end
 
   desc "check config_name", "A full linky job"
@@ -48,5 +48,6 @@ class Linky::CLI < Thor
     reset_shots(config)
     setup_folders(config)
     html(config)
+    status(config)
   end
 end

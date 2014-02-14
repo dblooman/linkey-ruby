@@ -12,16 +12,16 @@ directory:
 
 # Add only 2 domains, key will act as a label
 domain:
-  english: "http://www.live.bbc.co.uk/news"
+  english: "http://www.live.bbc.co.uk"
 
 #Type screen widths below, here are a couple of examples
 screen_widths:
   - 320
-  - 600
+  # - 600
   - 1024
 
 
 #Type page URL paths below, here are a couple of examples
 paths:
-  home: /
-  uk_index: /uk
+  home: /news/world
+  uk_index: /news/uk

@@ -12,23 +12,24 @@ class Linky::CheckResponse
     files = Dir.glob("#{linky.directory}/*/*.md")
   end
 
-  def test
+  def check_status
     arr = []
-  	open_files.each do |f|
-  	  test = File.read(f)
-      arr << test
-  	  links = arr.each do |l|
-        news = l.scan(/^\/news(?:|.+)?$/)
-        news.each do |n|
-          test = n.gsub("/news/", '')
-          puts test
-          # final = test.reject! { |c| c.empty? }
-          # puts final
-          # helper = final.each {|n| n.gsub("/news/", '')}
-          # puts helper
-        end
-      end
+    open_files.each do |f|
+      link_file = File.read(f)
+      arr << link_file
+      arr.each {|l| @news = l.scan(/^\/news(?:|.+)?$/)}
+      status(@news)
     end
   end
 
+  def status(urls)
+    urls.each do |url|
+      begin
+        gets = open(linky.base_domain + url)
+        puts "Status is #{gets.status} for #{url}"
+      rescue OpenURI::HTTPError => ex
+        puts "Status is NOT GOOD for #{url}" 
+      end  
+    end
+  end
 end
