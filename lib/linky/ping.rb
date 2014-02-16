@@ -1,3 +1,4 @@
+require 'linky'
 require 'open-uri'
 
 class Linky::CheckResponse
