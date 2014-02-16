@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'linky/version'
+require 'linkey/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "linky"
-  spec.version       = Linky::VERSION
+  spec.name          = "linkey"
+  spec.version       = Linkey::VERSION
   spec.authors       = ["Dave Blooman"]
   spec.email         = ["david.blooman@gmail.com"]
-  spec.summary       = 'Linky'
-  spec.description   = 'Linky'
+  spec.summary       = 'Linkey'
+  spec.description   = 'Linkey'
   spec.homepage      = "http://responsivenews.co.uk"
   spec.license       = "Apache 2"
 

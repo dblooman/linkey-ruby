@@ -1,4 +1,4 @@
-linky
+linkey
 =====
 
 Link checker for BBC News/WS Sites
@@ -8,10 +8,10 @@ The idea is to quickly check a page for broken links by doing a status check on 
 To use run 
 
 ```ruby
-./bin/linky check URL /regex Filename
+./bin/linkey check URL /regex Filename
 ```
 Example
 
 ```ruby
-./bin/linky check http://www.live.bbc.co.uk/arabic /arabic arabic.md
+./bin/linkey check http://www.live.bbc.co.uk/arabic /arabic arabic.md
 ```

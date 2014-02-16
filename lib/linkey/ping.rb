@@ -1,7 +1,7 @@
-require 'linky'
+require 'linkey'
 require 'open-uri'
 
-class Linky::CheckResponse
+class Linkey::CheckResponse
   attr_accessor :url, :reg, :file_name
 
   def initialize(url, reg, file_name)

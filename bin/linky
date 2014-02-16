@@ -3,8 +3,8 @@ require 'rubygems'
 require 'bundler/setup'
 
 begin
-  require 'linky/cli'
-  Linky::CLI.start
+  require 'linkey/cli'
+  Linkey::CLI.start
 rescue Interrupt => e
   puts "\nQuitting..."
   exit 1

@@ -1,6 +1,6 @@
-require 'linky'
+require 'linkey'
 
-class Linky::SaveLinks
+class Linkey::SaveLinks
   attr_accessor :url, :reg, :file_name
 
   def initialize(url, reg, file_name)
