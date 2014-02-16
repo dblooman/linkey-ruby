@@ -25,7 +25,7 @@ class Linky::CLI < Thor
 
   desc "check", "A full linky job"
   def check(url, reg, filename)
-    html(url, reg, filename)
+    scan(url, reg, filename)
     status(url, reg, filename)
   end
 end
