@@ -11,19 +11,19 @@ class Linky::CLI < Thor
     File.expand_path('../../../templates/', __FILE__)
   end
 
-  desc "html", "linkys screenshots"
-  def html(url, reg, filename)
+  desc "scan", "Save some URL's"
+  def scan(url, reg, filename)
     html = Linky::SaveLinks.new(url, reg, filename)
     html.check_page_links
   end
 
-  desc "parse links", "checks links"
+  desc "status", "checks links for errors"
   def status(url, reg, filename)
     status = Linky::CheckResponse.new(url, reg, filename)
     status.sort
   end
 
-  desc "check config_name", "A full linky job"
+  desc "check", "A full linky job"
   def check(url, reg, filename)
     html(url, reg, filename)
     status(url, reg, filename)

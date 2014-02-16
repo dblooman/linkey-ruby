@@ -1,4 +1,5 @@
 require 'linky'
+
 class Linky::SaveLinks
   attr_accessor :url, :reg, :file_name
 
