@@ -1,40 +1,19 @@
-require 'linky/linky'
+# require 'linky/linky'
 
 class Linky::SaveLinks
-  attr_reader :linky
+  attr_accessor :url, :reg, :file_name
 
-  def initialize(config)
-    @linky = Linky::Config.new(config)
+  def initialize(url, reg, file_name)
+    @url = url
+    @reg = reg
+    @file_name = file_name
   end
 
-  def directory
-    linky.directory
+  def js_file
+    File.expand_path('javascript/snap.js', File.dirname(__FILE__))
   end
 
-  def engine
-    linky.engine.each { |label, browser| return browser }
-  end
-
-  def urls(path)
-    linky.base_domain + path
-  end
-
-  def file_names(width, label, domain_label)
-    "#{directory}/#{label}/#{width}_#{engine}_#{domain_label}.md"
-  end
-
-  def check_links
-    linky.paths.each do |label, path|
-      url = urls(path)
-      
-      linky.widths.each do |width|
-        file_name = file_names(width, label, linky.domain_label)    
-        check_page_links engine, url, width, file_name
-      end
-    end
-  end
-
-  def check_page_links(browser, url, width, file_name)
-    puts `"#{browser}" "#{@linky.snap_file}" "#{url}" "#{width}" > "#{file_name}"`
+  def check_page_links
+    puts `phantomjs "#{js_file}" "#{url}" "#{reg}" > "#{file_name}"`
   end
 end
