@@ -6,9 +6,10 @@ Link checker for BBC News/WS Sites
 The idea is to quickly check a page for broken links by doing a status check on all the relative URL's on the page. 
 
 There are 4 parts to this tool, the URL, the base URL, the regex and the filename.  
-The URL is the page that you want to check for broken links, e.g www.bbc.co.uk/news/uk-29928282
-The Base URL is used with the relative URL from the regex to create a full URL, e.g www.bbc.co.uk
-THe regex is the point of the URL that you want to keep from the regex, e.g bbc.co.uk/news/uk, specifying /news would create /news/uk.
+
+The URL is the page that you want to check for broken links, e.g www.bbc.co.uk/news/uk-29928282   
+The Base URL is used with the relative URL from the regex to create a full URL, e.g www.bbc.co.uk  
+The regex is the point of the URL that you want to keep from the regex, e.g bbc.co.uk/news/uk, specifying /news would create /news/uk.  
 The filename is .md file where all the page links are stored, this can be useful for manual checks, e.g file.md
 
 Install 
