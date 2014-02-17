@@ -11,7 +11,7 @@ class Linkey::CheckResponse
     @file_name = file_name
   end
 
-  def sort
+  def check_links
     array = []
     links = File.read(file_name)
     array << links

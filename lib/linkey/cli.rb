@@ -8,16 +8,16 @@ class Linkey::CLI < Thor
   desc "scan", "Save some URL's"
   def scan(url, filename)
     html = Linkey::SaveLinks.new(url, filename)
-    html.check_page_links
+    html.capture_links
   end
 
   desc "status", "checks links for errors"
   def status(url, base, reg, filename)
     status = Linkey::CheckResponse.new(url, base, reg, filename)
-    status.sort
+    status.check_links
   end
 
-  desc "check", "A full linkey job"
+  desc "check URL Base_URL File", "A full linkey job"
   def check(url, base, reg, filename)
     scan(url, filename)
     status(url, base, reg, filename)

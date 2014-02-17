@@ -12,7 +12,7 @@ class Linkey::SaveLinks
     File.expand_path('javascript/snap.js', File.dirname(__FILE__))
   end
 
-  def check_page_links
+  def capture_links
     puts `phantomjs "#{js_file}" "#{url}" > "#{file_name}"`
   end
 end
