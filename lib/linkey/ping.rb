@@ -11,10 +11,6 @@ class Linkey::CheckResponse
     @file_name = file_name
   end
 
-  def cut
-    url.gsub("#{reg}", '')
-  end
-
   def sort
     array = []
     links = File.read(file_name)
