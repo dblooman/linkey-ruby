@@ -2,3 +2,5 @@
 pages/
 .DS_Store
 Gemfile.lock
+*.md
+!README.md
