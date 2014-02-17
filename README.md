@@ -31,6 +31,12 @@ Another
 ```ruby
 linkey check http://www.theguardian.com/technology/2014/feb/15/year-of-code-needs-reboot-teachers http://theguardian.com /technology news.md
 ```
+Output
+
+Once running, you'll see either a 200 with 
+`Status is 200 for URL`
+or 
+`Status is NOT GOOD for URL`
 
 Script it
 ```ruby
