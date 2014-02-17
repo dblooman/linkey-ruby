@@ -1,11 +1,10 @@
 require 'linkey'
 
 class Linkey::SaveLinks
-  attr_accessor :url, :reg, :file_name
+  attr_accessor :url, :file_name
 
-  def initialize(url, reg, file_name)
+  def initialize(url, file_name)
     @url = url
-    @reg = reg
     @file_name = file_name
   end
 
@@ -14,6 +13,6 @@ class Linkey::SaveLinks
   end
 
   def check_page_links
-    puts `phantomjs "#{js_file}" "#{url}" "#{reg}" > "#{file_name}"`
+    puts `phantomjs "#{js_file}" "#{url}" > "#{file_name}"`
   end
 end
