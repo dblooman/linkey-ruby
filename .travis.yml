@@ -1,9 +1,8 @@
 language: ruby
 rvm:
-  - "1.9.2"
   - "2.0.0"
 
-script: "./bin/linkey check http://test.on.bbcnewshq.com/news/uk http://test.on.bbcnewshq.com /news news.md "
+script: "./bin/linkey check http://test.on.bbcnewshq.com/news/world/uk http://test.on.bbcnewshq.com /news news.md"
 
 notifications:
   email:
