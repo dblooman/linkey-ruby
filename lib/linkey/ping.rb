@@ -36,9 +36,14 @@ class Linkey::CheckResponse
         gets = open(base + page_path)
         status = gets.status.first
         puts "Status is #{status} for #{base}#{page_path}"
-      rescue OpenURI::HTTPError => ex
-        puts "Status is NOT GOOD for #{base}#{page_path}" 
-      end  
+      rescue OpenURI::HTTPError
+        if status != 200
+          puts "Status is NOT GOOD for #{base}#{page_path}"
+          output = File.new("output.md", "w+")
+          output.write("URL #{page_path} on #{url}")
+          exit 1
+        end
+      end
     end
     puts "All Done!"
   end
