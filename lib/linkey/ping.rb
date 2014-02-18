@@ -30,6 +30,7 @@ class Linkey::CheckResponse
   end
 
   def status(urls)
+    @output = []
     puts "Checking..."
     urls.each do |page_path|
       begin
@@ -39,18 +40,15 @@ class Linkey::CheckResponse
       rescue OpenURI::HTTPError
         if status != 200
           puts "Status is NOT GOOD for #{base}#{page_path}"
-          output(page_path)
+          @output << page_path
         end
       end
     end
+    output
     puts "All Done!"
   end
 
-  def output(path)
-    array = []
-    array << path
-    if !path.nil?
-      exit 1
-    end
+  def output
+    exit 1 if !@output.nil?
   end  
 end
