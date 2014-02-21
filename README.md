@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/DaveBlooman/linkey.png?branch=master)](https://travis-ci.org/DaveBlooman/linkey)
 Linkey
 =====
 
