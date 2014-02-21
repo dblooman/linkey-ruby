@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby
-require 'rubygems'
 require 'bundler/setup'
 
 begin
   require 'linkey/cli'
   Linkey::CLI.start
-rescue Interrupt => e
+rescue Interrupt
   puts "\nQuitting..."
   exit 1
-rescue SystemExit => e
-  exit e.status
 end

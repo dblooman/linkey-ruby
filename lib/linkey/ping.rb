@@ -30,16 +30,31 @@ class Linkey::CheckResponse
   end
 
   def status(urls)
+    @output = []
     puts "Checking..."
     urls.each do |page_path|
       begin
         gets = open(base + page_path)
         status = gets.status.first
         puts "Status is #{status} for #{base}#{page_path}"
-      rescue OpenURI::HTTPError => ex
-        puts "Status is NOT GOOD for #{base}#{page_path}" 
-      end  
+      rescue OpenURI::HTTPError
+        if status != 200
+          puts "Status is NOT GOOD for #{base}#{page_path}"
+          @output << page_path
+        end
+      end
     end
-    puts "All Done!"
+    check_for_broken
+  end
+
+  def check_for_broken
+    puts "Checking"
+    if @output.empty?
+      puts 'URL\'s are good, All Done!'
+      exit 0
+    else
+      puts 'Buddy, you got a broken link'
+      exit 1
+    end
   end
 end
