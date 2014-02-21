@@ -44,11 +44,17 @@ class Linkey::CheckResponse
         end
       end
     end
-    output
-    puts "All Done!"
+    check_for_broken
   end
 
-  def output
-    exit 1 if !@output.nil?
-  end  
+  def check_for_broken
+    puts "Checking"
+    if @output.empty?
+      puts 'URL\'s are good, All Done!'
+      exit 0
+    else
+      puts 'Buddy, you got a broken link'
+      exit 1
+    end
+  end
 end
