@@ -1,6 +1,7 @@
 require 'thor'
 require 'linkey/html'
 require 'linkey/ping'
+require 'linkey/checker'
 
 class Linkey::CLI < Thor
   include Thor::Actions
@@ -21,5 +22,11 @@ class Linkey::CLI < Thor
   def check(url, base, reg, filename)
     scan(url, filename)
     status(url, base, reg, filename)
+  end
+
+  desc "status check URL", "A linkey job using predetermined URL's"
+  def smoke
+    smoke = Linkey::Checker.new#(path)
+    smoke.test
   end
 end
