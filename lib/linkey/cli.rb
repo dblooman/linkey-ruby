@@ -24,9 +24,9 @@ class Linkey::CLI < Thor
     status(url, base, reg, filename)
   end
 
-  desc "status check URL", "A linkey job using predetermined URL's"
-  def smoke
-    smoke = Linkey::Checker.new#(path)
-    smoke.test
+  desc "smoke [path/to/file]", "A linkey job using predetermined URL's"
+  def smoke(file)
+    check = Linkey::Checker.new(file)
+    check.smoke
   end
 end
