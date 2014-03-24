@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - "2.0.0"
 
-script: "./bin/linkey check http://www.live.bbc.co.uk/news http://www.live.bbc.co.uk /news news.md"
+script: "bundle exec bin/linkey check http://www.live.bbc.co.uk/news http://www.live.bbc.co.uk /news news.md"
 
 notifications:
   email:

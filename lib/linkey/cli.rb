@@ -18,7 +18,7 @@ class Linkey::CLI < Thor
     status.check_links
   end
 
-  desc "check URL Base_URL File", "A full linkey job"
+  desc "check URL Base_URL Regex File", "A full linkey job"
   def check(url, base, reg, filename)
     scan(url, filename)
     status(url, base, reg, filename)
