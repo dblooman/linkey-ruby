@@ -49,6 +49,7 @@ If you have a lot of URLs that you want to check all the time using from a file 
 linkey smoke test.yaml
 ```
 
+Example yaml file
 ```yaml
 base: 'http://www.bbc.co.uk'
 
