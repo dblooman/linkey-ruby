@@ -4,20 +4,22 @@ Linkey
 
 Link checker for BBC News/WS Sites
 
-The idea is to quickly check a page for broken links by doing a status check on all the relative URL's on the page. 
+The idea is to quickly check a page for broken links by doing a status check on all the relative URL's on the page.
 
 There are 4 parts to this tool, the URL, the base URL, the regex and the filename.  
 
-The URL is the page that you want to check for broken links, e.g www.bbc.co.uk/news/uk-29928282   
+The URL is the page that you want to check for broken links, e.g www.bbc.co.uk/news/uk-29928282
 The Base URL is used with the relative URL from the regex to create a full URL, e.g www.bbc.co.uk  
 The regex is the point of the URL that you want to keep from the regex, e.g bbc.co.uk/news/uk, specifying /news would create /news/uk.  
 The filename is .md file where all the page links are stored, this can be useful for manual checks, e.g file.md
 
-Install 
+Install
 
 `gem install linkey`
 
-To use run 
+## Command line usage
+
+To use run
 
 ```
 linkey check URL BASEURL /regex Filename
@@ -29,15 +31,32 @@ linkey check http://www.live.bbc.co.uk/arabic http://www.live.bbc.co.uk /arabic 
 ```
 Another
 
-```ruby
+```
 linkey check http://www.theguardian.com/technology/2014/feb/15/year-of-code-needs-reboot-teachers http://theguardian.com /technology news.md
 ```
 Output
 
-Once running, you'll see either a 200 with 
+Once running, you'll see either a 200 with
 `Status is 200 for URL`
-or 
+or
 `Status is NOT GOOD for URL`
+
+## From a file
+
+If you have a lot of URLs that you want to check all the time using from a file is an alternative option.  This will utilise the smoke option, then point to a YAML file with the extension.
+
+```
+linkey smoke test.yaml
+```
+
+Example yaml file
+```yaml
+base: 'http://www.bbc.co.uk'
+
+paths:
+  - /news
+  - /news/uk
+```
 
 Script it
 ```ruby
