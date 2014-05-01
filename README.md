@@ -13,7 +13,7 @@ The Base URL is used with the relative URL from the regex to create a full URL, 
 The regex is the point of the URL that you want to keep from the regex, e.g bbc.co.uk/news/uk, specifying /news would create /news/uk.  
 The filename is .md file where all the page links are stored, this can be useful for manual checks, e.g file.md
 
-Install
+## Install
 
 `gem install linkey`
 
