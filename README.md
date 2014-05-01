@@ -15,7 +15,9 @@ The filename is .md file where all the page links are stored, this can be useful
 
 ## Install
 
-`gem install linkey`
+```
+gem install linkey
+```
 
 ## Command line usage
 
