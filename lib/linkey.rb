@@ -73,7 +73,7 @@ module Linkey
     end
 
     def js_file
-      File.expand_path('javascript/snap.js', File.dirname(__FILE__))
+      File.expand_path('linkey/javascript/snap.js', File.dirname(__FILE__))
     end
 
     def capture_links
