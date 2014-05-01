@@ -1,7 +1,5 @@
 require 'thor'
-require 'linkey/html'
-require 'linkey/ping'
-require 'linkey/checker'
+require 'linkey'
 
 class Linkey::CLI < Thor
   include Thor::Actions

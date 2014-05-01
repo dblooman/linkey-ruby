@@ -41,6 +41,21 @@ Once running, you'll see either a 200 with
 or
 `Status is NOT GOOD for URL`
 
+## Script it
+```ruby
+require 'linkey'
+
+url = 'http://www.live.bbc.co.uk/arabic'
+base = 'http://www.live.bbc.co.uk'
+reg = '/arabic'
+filename = 'arabic.md'
+
+page = Linkey::SaveLinks.new(url, filename)
+status = Linkey::CheckResponse.new(url, base, reg, filename)
+
+page.capture_links
+status.check_links
+```
 ## From a file
 
 If you have a lot of URLs that you want to check all the time using from a file is an alternative option.  This will utilise the smoke option, then point to a YAML file with the extension.
@@ -58,20 +73,12 @@ paths:
   - /news/uk
 ```
 
-Script it
+
+Smoke test
+
 ```ruby
+require 'linkey'
 
-require 'linkey/html'
-require 'linkey/ping'
-
-url = 'http://www.live.bbc.co.uk/arabic'
-base = 'http://www.live.bbc.co.uk'
-reg = '/arabic'
-filename = 'arabic.md'
-
-page = Linkey::SaveLinks.new(url, filename)
-status = Linkey::CheckResponse.new(url, base, reg, filename)
-
-page.capture_links
-status.check_links
+tests = Linkey::Checker.new("path/to.yaml")
+tests.smoke
 ```
