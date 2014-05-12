@@ -91,7 +91,7 @@ module Linkey
       @smoke_urls['base']
     end
 
-    def self.smoke
+    def smoke
       urls = @smoke_urls['paths']
       status(urls)
     end
