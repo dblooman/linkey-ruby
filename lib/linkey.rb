@@ -85,9 +85,9 @@ module Linkey
   class Checker < CheckResponse
 
     def initialize(config)
-      if File.extname(config) == ".yaml"
+      if File.extname(config) == '.yaml'
         yaml_urls(config)
-      elsif File.extname(config) == ".json"
+      elsif File.extname(config) == '.json'
         json_urls(config)
       else
         puts "unsupported file type"
@@ -111,12 +111,9 @@ module Linkey
     end
 
     def smoke
-      begin
-        puts @urls
-        status(@urls)
+      status(@urls)
       rescue
-        puts "cannot smoke"
-      end
+      puts 'cannot smoke'
     end
   end
 end
