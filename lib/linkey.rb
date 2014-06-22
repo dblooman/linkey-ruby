@@ -1,6 +1,7 @@
-require "linkey/version"
+require 'linkey/version'
 require 'open-uri'
 require 'yaml'
+require 'json'
 
 module Linkey
   autoload :CLI, 'linkey/cli'
@@ -35,7 +36,7 @@ module Linkey
 
     def status(urls)
       @output = []
-      puts "Checking..."
+      puts 'Checking...'
       urls.each do |page_path|
         begin
           gets = open(base + page_path)
@@ -52,7 +53,7 @@ module Linkey
     end
 
     def check_for_broken
-      puts "Checking"
+      puts 'Checking'
       if @output.empty?
         puts 'URL\'s are good, All Done!'
         exit 0
@@ -82,18 +83,36 @@ module Linkey
   end
 
   class Checker < CheckResponse
-
     def initialize(config)
-      @smoke_urls = YAML::load(File.open("#{config}"))
+      if File.extname(config) == '.yaml'
+        yaml_urls(config)
+      elsif File.extname(config) == '.json'
+        json_urls(config)
+      else
+        puts 'unsupported file type'
+      end
     end
 
-    def base
-      @smoke_urls['base']
+    def json_urls(config)
+      @urls = []
+      urls = JSON.parse(File.read(config))
+      urls.map do |_k, v|
+        @urls << v
+        # replace with JSON base accessor
+        @base = 'http://www.bbc.co.uk'
+      end
+    end
+
+    def yaml_urls(config)
+      smoke_urls = YAML.load(File.open("#{config}"))
+      @urls = smoke_urls['paths']
+      @base = smoke_urls['base']
     end
 
     def smoke
-      urls = @smoke_urls['paths']
-      status(urls)
+      status(@urls)
+      rescue
+      puts 'cannot smoke'
     end
   end
 end
