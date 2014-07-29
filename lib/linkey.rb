@@ -1,6 +1,7 @@
-require "linkey/version"
+require 'linkey/version'
 require 'open-uri'
 require 'yaml'
+require 'parallel'
 
 module Linkey
   autoload :CLI, 'linkey/cli'
@@ -35,8 +36,8 @@ module Linkey
 
     def status(urls)
       @output = []
-      puts "Checking..."
-      urls.each do |page_path|
+      puts 'Checking...'
+      Parallel.each(urls, in_threads: 7) do |page_path|
         begin
           gets = open(base + page_path)
           status = gets.status.first
@@ -52,7 +53,7 @@ module Linkey
     end
 
     def check_for_broken
-      puts "Checking"
+      puts 'Checking'
       if @output.empty?
         puts 'URL\'s are good, All Done!'
         exit 0
@@ -82,9 +83,8 @@ module Linkey
   end
 
   class Checker < CheckResponse
-
     def initialize(config)
-      @smoke_urls = YAML::load(File.open("#{config}"))
+      @smoke_urls = YAML.load(File.open("#{config}"))
     end
 
     def base
