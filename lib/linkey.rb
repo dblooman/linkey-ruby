@@ -1,7 +1,7 @@
 require 'linkey/version'
-require 'open-uri'
 require 'yaml'
 require 'parallel'
+require 'typhoeus'
 
 module Linkey
   autoload :CLI, 'linkey/cli'
@@ -31,28 +31,32 @@ module Linkey
 
     def scan(page_links)
       urls = page_links.scan(/^#{Regexp.quote(reg)}(?:|.+)?$/)
-      status(urls)
+      Getter.status(urls, base)
     end
+  end
 
-    def status(urls)
+  class Getter
+    def self.status(urls, base)
       @output = []
       puts 'Checking...'
       Parallel.each(urls, in_threads: 7) do |page_path|
-        begin
-          gets = open(base + page_path)
-          status = gets.status.first
-          puts "Status is #{status} for #{base}#{page_path}"
-        rescue OpenURI::HTTPError
-          if status != 200
-            puts "Status is NOT GOOD for #{base}#{page_path}"
-            @output << page_path
-          end
-        end
+        request = Typhoeus.get(base + page_path.chomp('/'))
+        status = request.code
+        make_request(page_path, base, status)
       end
       check_for_broken
     end
 
-    def check_for_broken
+    def self.make_request(page_path, base, status)
+      if status != 200
+        puts "Status is NOT GOOD for #{base}#{page_path}, response is #{status}"
+        @output << page_path
+      else
+        puts "Status is #{status} for #{base}#{page_path}"
+      end
+    end
+
+    def self.check_for_broken
       puts 'Checking'
       if @output.empty?
         puts 'URL\'s are good, All Done!'
@@ -93,7 +97,7 @@ module Linkey
 
     def smoke
       urls = @smoke_urls['paths']
-      status(urls)
+      Getter.status(urls, base)
     end
   end
 end
