@@ -1,6 +1,7 @@
 require "linkey/version"
 require 'open-uri'
 require 'yaml'
+require 'parallel'
 
 module Linkey
   autoload :CLI, 'linkey/cli'
@@ -36,7 +37,7 @@ module Linkey
     def status(urls)
       @output = []
       puts "Checking..."
-      urls.each do |page_path|
+      Parallel.each(urls, :in_threads=>7) do |page_path|
         begin
           gets = open(base + page_path)
           status = gets.status.first
