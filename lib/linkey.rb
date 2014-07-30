@@ -36,11 +36,11 @@ module Linkey
   end
 
   class Getter
-    def self.status(urls, base)
+    def self.status(urls, base, headers={})
       @output = []
       puts 'Checking...'
       Parallel.each(urls, in_threads: 7) do |page_path|
-        request = Typhoeus.get(base + page_path.chomp('/'))
+        request = Typhoeus.get(base + page_path.chomp('/'), headers)
         status = request.code
         make_request(page_path, base, status)
       end
@@ -97,7 +97,9 @@ module Linkey
 
     def smoke
       urls = @smoke_urls['paths']
-      Getter.status(urls, base)
+      options = @smoke_urls['headers']
+      headers = Hash[*options]
+      Getter.status(urls, base, headers: headers)
     end
   end
 end
