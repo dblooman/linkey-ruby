@@ -39,7 +39,7 @@ module Linkey
     def self.status(urls, base, headers = {})
       @output = []
       puts 'Checking...'
-      Parallel.each(urls, in_threads: 7) do |page_path|
+      Parallel.each(urls, in_threads: 4) do |page_path|
         request = Typhoeus.get(base + page_path.chomp('/'), headers)
         status = request.code
         make_request(page_path, base, status)
