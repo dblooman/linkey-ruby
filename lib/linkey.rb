@@ -36,19 +36,19 @@ module Linkey
   end
 
   class Getter
-    def self.status(urls, base, headers = {})
+    def self.status(urls, base, headers = {}, status_code = 200)
       @output = []
       puts 'Checking...'
       Parallel.each(urls, in_threads: 4) do |page_path|
         request = Typhoeus.get(base + page_path.chomp('/'), headers)
         status = request.code
-        make_request(page_path, base, status)
+        make_request(page_path, base, status, status_code)
       end
       check_for_broken
     end
 
-    def self.make_request(page_path, base, status)
-      if status != 200
+    def self.make_request(page_path, base, status, status_code)
+      if status != status_code
         puts "Status is NOT GOOD for #{base}#{page_path}, response is #{status}"
         @output << page_path
       else
@@ -99,7 +99,8 @@ module Linkey
       urls = @smoke_urls['paths']
       options = @smoke_urls['headers']
       headers = Hash[*options]
-      Getter.status(urls, base, headers: headers)
+      @smoke_urls['status_code'] ? status_code = @smoke_urls['status_code'] : status_code = 200
+      Getter.status(urls, base, headers, status_code)
     end
   end
 end
