@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - "2.0.0"
 
-script: "bundle exec bin/linkey check http://www.theguardian.com/technology/2014/feb/15/year-of-code-needs-reboot-teachers http://www.theguardian.com /technology news.md"
+script: "bundle exec bin/linkey check http://www.bbc.com/arabic http://www.bbc.com /arabic arabic.md"
 
 notifications:
   email:
