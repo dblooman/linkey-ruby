@@ -100,7 +100,7 @@ module Linkey
       options = @smoke_urls['headers']
       headers = Hash[*options]
       @smoke_urls['status_code'] ? status_code = @smoke_urls['status_code'] : status_code = 200
-      Getter.status(urls, base, headers, status_code)
+      Getter.status(urls, base, { headers: headers }, status_code)
     end
   end
 end
