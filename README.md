@@ -60,7 +60,7 @@ status.check_links
 ```
 ## From a file
 
-If you have a lot of URLs that you want to check all the time using from a file is an alternative option.  This will utilise the smoke option, then point to a YAML file with the extension.
+If you have a lot of URLs that you want to check all the time using from a file is an alternative option.  This will utilise the smoke option, then point to a YAML file with the extension.  In some situations, we are deploying applications that we don't want public facing, so ensuring they 404 is essential.  There is a status code option to allow a specific status code to be set against a group of URL's, ensuring builds fail if the right code conditions are met.
 
 ```
 linkey smoke test.yaml
@@ -69,6 +69,8 @@ linkey smoke test.yaml
 Example yaml file
 ```yaml
 base: 'http://www.bbc.co.uk'
+
+status_code: 200
 
 paths:
   - /news
