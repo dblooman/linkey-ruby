@@ -36,7 +36,7 @@ module Linkey
   end
 
   class Getter
-    def self.status(urls, base, headers = {}, status_code)
+    def self.status(urls, base, headers = {}, status_code = 200)
       @output = []
       puts 'Checking...'
       Parallel.each(urls, in_threads: 4) do |page_path|
