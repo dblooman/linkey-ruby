@@ -17,10 +17,8 @@ module Linkey
     end
 
     def check_links
-      array = []
-      links = File.read(file_name)
-      array << links
-      links(array)
+      links_list = File.read(file_name).split(',')
+      links(links_list)
     end
 
     def links(links)
@@ -32,6 +30,41 @@ module Linkey
     def scan(page_links)
       urls = page_links.scan(/^#{Regexp.quote(reg)}(?:|.+)?$/)
       Getter.status(urls, base)
+    end
+  end
+
+  class SaveLinks
+    attr_accessor :url, :file_name
+
+    def initialize(url, file_name)
+      @url = url
+      @file_name = file_name
+    end
+
+    def js_file
+      File.expand_path('linkey/javascript/snap.js', File.dirname(__FILE__))
+    end
+
+    def capture_links
+      puts `phantomjs "#{js_file}" "#{url}" > "#{file_name}"`
+    end
+  end
+
+  class Checker
+    def initialize(config)
+      @smoke_urls = YAML.load(File.open("#{config}"))
+    end
+
+    def base
+      @smoke_urls['base']
+    end
+
+    def smoke
+      urls = @smoke_urls['paths']
+      options = @smoke_urls['headers']
+      headers = Hash[*options]
+      @smoke_urls['status_code'] ? status_code = @smoke_urls['status_code'] : status_code = 200
+      Getter.status(urls, base, { headers: headers }, status_code)
     end
   end
 
@@ -66,41 +99,6 @@ module Linkey
         puts @output
         exit 1
       end
-    end
-  end
-
-  class SaveLinks
-    attr_accessor :url, :file_name
-
-    def initialize(url, file_name)
-      @url = url
-      @file_name = file_name
-    end
-
-    def js_file
-      File.expand_path('linkey/javascript/snap.js', File.dirname(__FILE__))
-    end
-
-    def capture_links
-      puts `phantomjs "#{js_file}" "#{url}" > "#{file_name}"`
-    end
-  end
-
-  class Checker < CheckResponse
-    def initialize(config)
-      @smoke_urls = YAML.load(File.open("#{config}"))
-    end
-
-    def base
-      @smoke_urls['base']
-    end
-
-    def smoke
-      urls = @smoke_urls['paths']
-      options = @smoke_urls['headers']
-      headers = Hash[*options]
-      @smoke_urls['status_code'] ? status_code = @smoke_urls['status_code'] : status_code = 200
-      Getter.status(urls, base, { headers: headers }, status_code)
     end
   end
 end
