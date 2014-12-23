@@ -2,6 +2,8 @@ require 'linkey/version'
 require 'yaml'
 require 'parallel'
 require 'typhoeus'
+require 'faraday'
+require 'typhoeus/adapters/faraday'
 
 module Linkey
   autoload :CLI, 'linkey/cli'
@@ -69,12 +71,16 @@ module Linkey
   end
 
   class Getter
-    def self.status(urls, base, headers = {}, status_code = 200)
+    def self.status(urls, base, _headers = {}, status_code = 200)
       @output = []
       puts 'Checking...'
+
       Parallel.each(urls, in_threads: 4) do |page_path|
-        request = Typhoeus.get(base + page_path.chomp('/'), headers)
-        status = request.code
+
+        request = Faraday.new(url: base, ssl: { verify: false }) do |faraday|
+          faraday.adapter :typhoeus
+        end
+        status = request.get(page_path).status
         make_request(page_path, base, status, status_code)
       end
       check_for_broken

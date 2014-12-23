@@ -29,7 +29,7 @@ linkey check URL BASEURL /regex Filename
 Example
 
 ```
-linkey check http://www.live.bbc.co.uk/arabic http://www.live.bbc.co.uk /arabic arabic.md
+linkey check http://www.bbc.co.uk/arabic http://www.bbc.co.uk /arabic arabic.md
 ```
 Another
 
