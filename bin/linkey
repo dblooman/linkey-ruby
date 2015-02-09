@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 begin
-  require 'linkey/cli'
+  require "linkey/cli"
   Linkey::CLI.start
 rescue Interrupt
   puts "\nQuitting..."

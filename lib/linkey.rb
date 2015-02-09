@@ -1,12 +1,12 @@
-require 'linkey/version'
-require 'yaml'
-require 'parallel'
-require 'typhoeus'
-require 'faraday'
-require 'typhoeus/adapters/faraday'
+require "linkey/version"
+require "yaml"
+require "parallel"
+require "typhoeus"
+require "faraday"
+require "typhoeus/adapters/faraday"
 
 module Linkey
-  autoload :CLI, 'linkey/cli'
+  autoload :CLI, "linkey/cli"
 
   class CheckResponse
     attr_accessor :url, :base, :reg, :file_name
@@ -19,7 +19,7 @@ module Linkey
     end
 
     def check_links
-      links_list = File.read(file_name).split(',')
+      links_list = File.read(file_name).split(",")
       links(links_list)
     end
 
@@ -44,7 +44,7 @@ module Linkey
     end
 
     def js_file
-      File.expand_path('linkey/javascript/snap.js', File.dirname(__FILE__))
+      File.expand_path("linkey/javascript/snap.js", File.dirname(__FILE__))
     end
 
     def capture_links
@@ -58,26 +58,25 @@ module Linkey
     end
 
     def base
-      @smoke_urls['base']
+      @smoke_urls["base"]
     end
 
     def smoke
-      urls = @smoke_urls['paths']
-      options = @smoke_urls['headers']
+      urls = @smoke_urls["paths"]
+      options = @smoke_urls["headers"]
       headers = Hash[*options]
-      @smoke_urls['status_code'] ? status_code = @smoke_urls['status_code'] : status_code = 200
-      Getter.status(urls, base, { headers: headers }, status_code)
+      @smoke_urls["status_code"] ? status_code = @smoke_urls["status_code"] : status_code = 200
+      Getter.status(urls, base, { :headers => headers }, status_code)
     end
   end
 
   class Getter
     def self.status(urls, base, _headers = {}, status_code = 200)
       @output = []
-      puts 'Checking...'
+      puts "Checking..."
 
-      Parallel.each(urls, in_threads: 4) do |page_path|
-
-        request = Faraday.new(url: base, ssl: { verify: false }) do |faraday|
+      Parallel.each(urls, :in_threads => 4) do |page_path|
+        request = Faraday.new(:url => base, :ssl => { :verify => false }) do |faraday|
           faraday.adapter :typhoeus
         end
         status = request.get(page_path).status
@@ -96,12 +95,12 @@ module Linkey
     end
 
     def self.check_for_broken
-      puts 'Checking'
+      puts "Checking"
       if @output.empty?
         puts 'URL\'s are good, All Done!'
         exit 0
       else
-        puts 'Buddy, you got a broken link'
+        puts "Buddy, you got a broken link"
         puts @output
         exit 1
       end

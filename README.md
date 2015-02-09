@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/DaveBlooman/linkey.png?branch=master)](https://travis-ci.org/DaveBlooman/linkey)  [![Code Climate](https://codeclimate.com/github/DaveBlooman/linkey/badges/gpa.svg)](https://codeclimate.com/github/DaveBlooman/linkey)
+[![Build Status](https://travis-ci.org/DaveBlooman/linkey.png?branch=master)](https://travis-ci.org/DaveBlooman/linkey)  [![Code Climate](https://codeclimate.com/github/DaveBlooman/linkey/badges/gpa.svg)](https://codeclimate.com/github/DaveBlooman/linkey)  [![Gem Version](https://badge.fury.io/rb/linkey.svg)](http://badge.fury.io/rb/linkey)
 Linkey
 =====
 
