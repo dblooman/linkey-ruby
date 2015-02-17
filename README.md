@@ -70,13 +70,16 @@ Example yaml file
 ```yaml
 base: 'http://www.bbc.co.uk'
 
+headers:
+ -
+   X-content-override: 'https://example.com'
+
 status_code: 200
 
 paths:
   - /news
   - /news/uk
 ```
-
 
 Smoke test
 

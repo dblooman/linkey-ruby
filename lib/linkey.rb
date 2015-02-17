@@ -72,12 +72,12 @@ module Linkey
   end
 
   class Getter
-    def self.status(urls, base, _headers = {}, status_code = 200)
+    def self.status(urls, base, headers = {}, status_code = 200)
       @output = []
       puts "Checking..."
 
       Parallel.each(urls, :in_threads => 4) do |page_path|
-        request = Faraday.new(:url => base, :ssl => { :verify => false }) do |faraday|
+        request = Faraday.new(:url => base, :ssl => { :verify => false }, :headers => headers[:headers]) do |faraday|
           faraday.use FaradayMiddleware::FollowRedirects
           faraday.adapter :typhoeus
         end
