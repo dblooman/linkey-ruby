@@ -4,6 +4,7 @@ require "parallel"
 require "typhoeus"
 require "faraday"
 require "typhoeus/adapters/faraday"
+require 'faraday_middleware'
 
 module Linkey
   autoload :CLI, "linkey/cli"
@@ -77,6 +78,7 @@ module Linkey
 
       Parallel.each(urls, :in_threads => 4) do |page_path|
         request = Faraday.new(:url => base, :ssl => { :verify => false }) do |faraday|
+          faraday.use FaradayMiddleware::FollowRedirects
           faraday.adapter :typhoeus
         end
         status = request.get(page_path).status
