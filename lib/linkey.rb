@@ -71,11 +71,14 @@ module Linkey
     HYDRA = Typhoeus::Hydra.new(:max_concurrency => 100)
 
     def self.status(urls, base, headers = {}, status_code = 200)
+      @output = []
       puts "Checking..."
+
+      options = { :followlocation => true, :ssl_verifypeer => false, :headers => headers[:headers] }
 
       requests = urls.map do |page_paths|
         begin
-          request = Typhoeus::Request.new(base + page_paths, :followlocation => true, :ssl_verifypeer => false, :headers => headers[:headers])
+          request = Typhoeus::Request.new(base + page_paths, options)
           HYDRA.queue(request)
           request
         rescue
@@ -99,7 +102,6 @@ module Linkey
     end
 
     def self.make_request(url, status, status_code)
-      @output = []
       if status != status_code
         puts "Status is NOT GOOD for #{url}, response is #{status}"
         @output << url
@@ -114,7 +116,7 @@ module Linkey
         puts 'URL\'s are good, All Done!'
         exit 0
       else
-        puts "Buddy, you got a broken link"
+        puts "Buddy, you got a bad link"
         puts @output
         exit 1
       end
