@@ -1,10 +1,6 @@
 require "linkey/version"
 require "yaml"
-require "parallel"
 require "typhoeus"
-require "faraday"
-require "typhoeus/adapters/faraday"
-require 'faraday_middleware'
 
 module Linkey
   autoload :CLI, "linkey/cli"
@@ -72,27 +68,43 @@ module Linkey
   end
 
   class Getter
+    HYDRA = Typhoeus::Hydra.new(:max_concurrency => 100)
+
     def self.status(urls, base, headers = {}, status_code = 200)
-      @output = []
       puts "Checking..."
 
-      Parallel.each(urls, :in_threads => 4) do |page_path|
-        request = Faraday.new(:url => base, :ssl => { :verify => false }, :headers => headers[:headers]) do |faraday|
-          faraday.use FaradayMiddleware::FollowRedirects
-          faraday.adapter :typhoeus
+      requests = urls.map do |page_paths|
+        begin
+          request = Typhoeus::Request.new(base + page_paths, :followlocation => true, :ssl_verifypeer => false, :headers => headers[:headers])
+          HYDRA.queue(request)
+          request
+        rescue
+          puts "Error with URL #{page_paths}, please check config"
         end
-        status = request.get(page_path).status
-        make_request(page_path, base, status, status_code)
       end
+
+      HYDRA.run
+
+      requests.map do |request|
+        begin
+          status = request.response.code
+          url = request.response.options[:effective_url]
+          make_request(url, status, status_code)
+        rescue
+          puts "Unable to get status code"
+        end
+      end
+
       check_for_broken
     end
 
-    def self.make_request(page_path, base, status, status_code)
+    def self.make_request(url, status, status_code)
+      @output = []
       if status != status_code
-        puts "Status is NOT GOOD for #{base}#{page_path}, response is #{status}"
-        @output << page_path
+        puts "Status is NOT GOOD for #{url}, response is #{status}"
+        @output << url
       else
-        puts "Status is #{status} for #{base}#{page_path}"
+        puts "Status is #{status} for #{url}"
       end
     end
 
