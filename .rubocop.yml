@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - "**/*.gemspec"
+
 Lint/SpaceBeforeFirstArg:
   Severity: fatal
   Enabled: true
@@ -30,6 +34,10 @@ Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
 Style/BracesAroundHashParameters:
+  Severity: fatal
+  Enabled: true
+
+ClassAndModuleChildren:
   Severity: fatal
   Enabled: true
 
