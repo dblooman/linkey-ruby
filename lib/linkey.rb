@@ -28,7 +28,7 @@ module Linkey
 
     def scan(page_links)
       urls = page_links.scan(/^#{Regexp.quote(reg)}(?:|.+)?$/)
-      Getter.status(urls, base)
+      Getter.new(urls, base).check
     end
   end
 
@@ -63,63 +63,87 @@ module Linkey
       options = @smoke_urls["headers"]
       headers = Hash[*options]
       @smoke_urls["status_code"] ? status_code = @smoke_urls["status_code"] : status_code = 200
-      Getter.status(urls, base, { :headers => headers }, status_code)
+      Getter.new(urls, base, { :headers => headers }, status_code).check
     end
   end
 
   class Getter
-    HYDRA = Typhoeus::Hydra.new(:max_concurrency => 100)
+    def initialize(paths, base, headers = {}, status = 200)
+      @paths   = paths
+      @base    = base
+      @headers = headers
+      @status  = status
+    end
 
-    def self.status(urls, base, headers = {}, status_code = 200)
-      @output = []
+    def check
       puts "Checking..."
 
-      options = { :followlocation => true, :ssl_verifypeer => false, :headers => headers[:headers] }
-
-      requests = urls.map do |page_paths|
+      paths.each do |path|
         begin
-          request = Typhoeus::Request.new(base + page_paths, options)
-          HYDRA.queue(request)
-          request
+          Typhoeus::Request.new(url(path), options).tap do |req|
+            req.on_complete { |r| parse_response(r, status) }
+            HYDRA.queue req
+          end
         rescue
-          puts "Error with URL #{page_paths}, please check config"
+          puts "Error with URL #{path}, please check config"
         end
       end
 
       HYDRA.run
-
-      requests.map do |request|
-        begin
-          status = request.response.code
-          url = request.response.options[:effective_url]
-          make_request(url, status, status_code)
-        rescue
-          puts "Unable to get status code"
-        end
-      end
-
       check_for_broken
     end
 
-    def self.make_request(url, status, status_code)
+    private
+
+    attr_reader :base, :headers, :paths, :status
+
+    HYDRA = Typhoeus::Hydra.new(:max_concurrency => 100)
+
+    def check_for_broken
+      puts "Checking"
+      if output.empty?
+        puts 'URL\'s are good, All Done!'
+        exit 0
+      else
+        puts "Buddy, you got a bad link"
+        puts output
+        exit 1
+      end
+    end
+
+    def make_request(url, status, status_code)
       if status != status_code
         puts "Status is NOT GOOD for #{url}, response is #{status}"
-        @output << url
+        output << url
       else
         puts "Status is #{status} for #{url}"
       end
     end
 
-    def self.check_for_broken
-      puts "Checking"
-      if @output.empty?
-        puts 'URL\'s are good, All Done!'
-        exit 0
-      else
-        puts "Buddy, you got a bad link"
-        puts @output
-        exit 1
-      end
+    def options
+      {
+        :followlocation => true,
+        :ssl_verifypeer => false,
+        :headers        => headers[:headers]
+      }
+    end
+
+    def output
+      @output ||= []
+    end
+
+    def parse_response(resp, status)
+      make_request(
+        resp.options[:effective_url],
+        resp.code,
+        status
+      )
+    rescue
+      puts "Unable to get status code"
+    end
+
+    def url(path)
+      "#{base}#{path}"
     end
   end
 end
