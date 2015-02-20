@@ -84,8 +84,8 @@ module Linkey
             req.on_complete { |r| parse_response(r, status) }
             HYDRA.queue req
           end
-        rescue
-          puts "Error with URL #{path}, please check config"
+        rescue URI::InvalidURIError => e
+          puts "Error with URL #{path}, please check config."
         end
       end
 
