@@ -28,7 +28,7 @@ module Linkey
 
     def scan(page_links)
       urls = page_links.scan(/^#{Regexp.quote(reg)}(?:|.+)?$/)
-      Getter.status(urls, base)
+      Getter.new(urls, base).check
     end
   end
 
@@ -101,12 +101,12 @@ module Linkey
 
     def check_for_broken
       puts "Checking"
-      if @output.empty?
+      if output.empty?
         puts 'URL\'s are good, All Done!'
         exit 0
       else
         puts "Buddy, you got a bad link"
-        puts @output
+        puts output
         exit 1
       end
     end
@@ -114,7 +114,7 @@ module Linkey
     def make_request(url, status, status_code)
       if status != status_code
         puts "Status is NOT GOOD for #{url}, response is #{status}"
-        @output << url
+        output << url
       else
         puts "Status is #{status} for #{url}"
       end
