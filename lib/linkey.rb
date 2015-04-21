@@ -28,7 +28,7 @@ module Linkey
 
     def scan(page_links)
       urls = page_links.scan(/^#{Regexp.quote(reg)}(?:|.+)?$/)
-      Getter.new(urls, base).check
+      Getter.new(urls, base, 100, 200, {}).check
     end
   end
 
@@ -77,7 +77,7 @@ module Linkey
   end
 
   class Getter
-    def initialize(paths, base, concurrency, status, headers = {})
+    def initialize(paths, base, concurrency, status, headers)
       @paths       = paths
       @base        = base
       @headers     = headers
