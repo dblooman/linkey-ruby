@@ -50,29 +50,40 @@ module Linkey
   end
 
   class Checker
+    attr_accessor :config
+
     def initialize(config)
-      @smoke_urls = YAML.load(File.open("#{config}"))
+      @config = YAML.load(File.open("#{config}"))
     end
 
     def base
-      @smoke_urls["base"]
+      config["base"]
+    end
+
+    def concurrency
+      config["concurrency"] ? config["concurrency"] : 100
+    end
+
+    def status_code
+      config["status_code"] ? config["status_code"] : 200
     end
 
     def smoke
-      urls = @smoke_urls["paths"]
-      options = @smoke_urls["headers"]
+      urls = config["paths"]
+      options = config["headers"]
       headers = Hash[*options]
-      @smoke_urls["status_code"] ? status_code = @smoke_urls["status_code"] : status_code = 200
-      Getter.new(urls, base, { :headers => headers }, status_code).check
+      Getter.new(urls, base, concurrency, status_code, { :headers => headers }).check
     end
   end
 
   class Getter
-    def initialize(paths, base, headers = {}, status = 200)
-      @paths   = paths
-      @base    = base
-      @headers = headers
-      @status  = status
+    def initialize(paths, base, concurrency, status, headers = {})
+      @paths       = paths
+      @base        = base
+      @headers     = headers
+      @status      = status
+
+      @hydra = Typhoeus::Hydra.new(:max_concurrency => concurrency)
     end
 
     def check
@@ -82,22 +93,20 @@ module Linkey
         begin
           Typhoeus::Request.new(url(path), options).tap do |req|
             req.on_complete { |r| parse_response(r, status) }
-            HYDRA.queue req
+            hydra.queue req
           end
-        rescue URI::InvalidURIError => e
+        rescue URI::InvalidURIError
           puts "Error with URL #{path}, please check config."
         end
       end
 
-      HYDRA.run
+      hydra.run
       check_for_broken
     end
 
     private
 
-    attr_reader :base, :headers, :paths, :status
-
-    HYDRA = Typhoeus::Hydra.new(:max_concurrency => 100)
+    attr_reader :base, :headers, :paths, :status, :concurrency, :hydra
 
     def check_for_broken
       puts "Checking"

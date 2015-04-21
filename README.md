@@ -68,6 +68,8 @@ Example YAML Config:
 ```yaml
 base: 'http://www.bbc.co.uk'
 
+concurrency: 100
+
 headers:
  -
    X-content-override: 'https://example.com'
